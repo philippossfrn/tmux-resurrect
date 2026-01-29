@@ -109,8 +109,17 @@ _RESURRECT_DIR="$(resurrect_dir)"
 
 resurrect_file_path() {
 	if [ -z "$_RESURRECT_FILE_PATH" ]; then
-		local timestamp="$(date +"%Y%m%dT%H%M%S")"
-		echo "$(resurrect_dir)/${RESURRECT_FILE_PREFIX}_${timestamp}.${RESURRECT_FILE_EXTENSION}"
+		local current_session="$(tmux display-message -p '#S')"
+
+		# Check if session name is just a number (default unnamed session)
+		if [[ "$current_session" =~ ^[0-9]+$ ]]; then
+			# Prompt for a session name
+			tmux command-prompt -p "Save session as:" "run-shell 'tmux rename-session %1'"
+			# Get the new session name after renaming
+			current_session="$(tmux display-message -p '#S')"
+		fi
+
+		echo "$(resurrect_dir)/${current_session}.${RESURRECT_FILE_EXTENSION}"
 	else
 		echo "$_RESURRECT_FILE_PATH"
 	fi

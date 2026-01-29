@@ -29,6 +29,17 @@ Automatic restoring and continuous saving of tmux env is also possible with
 - `prefix + Ctrl-s` - save
 - `prefix + Ctrl-r` - restore
 
+**Custom key bindings example:**
+
+If you prefer simpler key bindings (e.g., `prefix + s` instead of `prefix + Ctrl-s`),
+add this to your `.tmux.conf`:
+
+    # Save session with prefix + s
+    bind-key s run-shell '~/.tmux/plugins/tmux-resurrect/scripts/save.sh'
+
+    # Restore session with prefix + R
+    bind-key R run-shell '~/.tmux/plugins/tmux-resurrect/scripts/restore.sh'
+
 ### About
 
 This plugin goes to great lengths to save and restore all the details from your
@@ -82,6 +93,23 @@ Add this line to the bottom of `.tmux.conf`:
 
 Reload TMUX environment with: `$ tmux source-file ~/.tmux.conf`.
 You should now be able to use the plugin.
+
+### Session Manager (`attach` command)
+
+Upon installation, tmux-resurrect creates an `attach` script in `$HOME/bin/`
+that provides an interactive session manager. Simply run `attach` in your
+terminal to:
+
+- List all saved tmux sessions
+- Restore a session by selecting its number
+- Delete saved sessions (press `d`)
+- Rename saved sessions (press `r`)
+
+**Note:** For the `attach` command to work, `$HOME/bin` must be in your PATH.
+Most Linux distributions include this by default, but if not, add this to your
+`.bashrc` or `.zshrc`:
+
+    export PATH="$HOME/bin:$PATH"
 
 ### Docs
 
